@@ -204,22 +204,23 @@ class BorutaShap:
 
         if self.train_or_test.lower() == 'test':
             # keeping the same naming convenetion as to not add complexit later on
-            self.X_boruta_train, self.X_boruta_test, self.y_train, self.y_test = train_test_split(self.X_boruta,
-                                                                                            self.y,
-                                                                                            test_size=0.3,
-                                                                                            random_state=self.random_state)
-            self.Train_model(self.X_boruta_train, self.y_train)
+            self.X_boruta_train, self.X_boruta_test, self.y_train, self.y_test, self.w_train, self.w_test = train_test_split(self.X_boruta,
+                                                                                                                            self.y,
+                                                                                                                            self.sample_weight,
+                                                                                                                            test_size=0.3,
+                                                                                                                            random_state=self.random_state)
+            self.Train_model(self.X_boruta_train, self.y_train, sample_weight = self.w_train)
 
         elif self.train_or_test.lower() == 'train':
             # model will be trained and evaluated on the same data
-            self.Train_model(self.X_boruta, self.y)
+            self.Train_model(self.X_boruta, self.y, self.sample_weight)
 
         else:
             raise ValueError('The train_or_test parameter can only be "train" or "test"')
 
 
 
-    def Train_model(self, X, y):
+    def Train_model(self, X, y, sample_weight = None):
 
         """
         Trains Model also checks to see if the model is an instance of catboost as it needs extra parameters
@@ -240,20 +241,20 @@ class BorutaShap:
         """
 
         if 'catboost' in str(type(self.model)).lower():
-            self.model.fit(X, y, cat_features = self.X_categorical,  verbose=False)
+            self.model.fit(X, y, sample_weight = sample_weight, cat_features = self.X_categorical,  verbose=False)
 
         else:
 
             try:
-                self.model.fit(X, y, verbose=False)
+                self.model.fit(X, y, sample_weight = sample_weight, verbose=False)
 
             except:
-                self.model.fit(X, y)
+                self.model.fit(X, y, sample_weight = sample_weight)
 
 
 
 
-    def fit(self, X, y, n_trials = 20, random_state=0, sample=False,
+    def fit(self, X, y, sample_weight = None, n_trials = 20, random_state=0, sample=False,
             train_or_test = 'test', normalize=True, verbose=True):
 
         """
@@ -320,6 +321,7 @@ class BorutaShap:
         self.starting_X = X.copy()
         self.X = X.copy()
         self.y = y.copy()
+        self.sample_weight = sample_weight.copy()
         self.n_trials = n_trials
         self.random_state = random_state
         self.ncols = self.X.shape[1]
