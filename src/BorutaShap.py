@@ -203,7 +203,7 @@ class BorutaShap:
         """
 
         if self.train_or_test.lower() == 'test':
-            # keeping the same naming convenetion as to not add complexit later on
+            # keeping the same naming convenetion as to not add complexity later on
             self.X_boruta_train, self.X_boruta_test, self.y_train, self.y_test, self.w_train, self.w_test = train_test_split(self.X_boruta,
                                                                                                                             self.y,
                                                                                                                             self.sample_weight,
@@ -317,6 +317,8 @@ class BorutaShap:
 
         """
 
+        if sample_weight is None:
+            sample_weight = np.ones(len(X))
         np.random.seed(random_state)
         self.starting_X = X.copy()
         self.X = X.copy()
