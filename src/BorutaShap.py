@@ -209,18 +209,18 @@ class BorutaShap:
                                                                                                                             self.sample_weight,
                                                                                                                             test_size=0.3,
                                                                                                                             random_state=self.random_state)
-            self.Train_model(self.X_boruta_train, self.y_train, sample_weight = self.w_train)
+            self.Train_model(self.X_boruta_train, self.y_train, self.X_val, self.Y_val, self.w_train, self.val_sample_weight, self.train_loss_monitor, self.val_loss_monitor, self.early_stopping_rounds)
 
         elif self.train_or_test.lower() == 'train':
             # model will be trained and evaluated on the same data
-            self.Train_model(self.X_boruta, self.y, self.sample_weight)
+            self.Train_model(self.X_boruta, self.y, self.X_val, self.Y_val, self.sample_weight, self.val_sample_weight, self.train_loss_monitor, self.val_los_monitor, self.early_stopping_rounds)
 
         else:
             raise ValueError('The train_or_test parameter can only be "train" or "test"')
 
 
 
-    def Train_model(self, X, y, sample_weight = None):
+    def Train_model(self, X, y, X_val=None, Y_val=None, sample_weight=None, val_sample_weight=None, train_loss_monitor=None, val_los_monitor=None, early_stopping_rounds=None):
 
         """
         Trains Model also checks to see if the model is an instance of catboost as it needs extra parameters
@@ -241,20 +241,24 @@ class BorutaShap:
         """
 
         if 'catboost' in str(type(self.model)).lower():
-            self.model.fit(X, y, sample_weight = sample_weight, cat_features = self.X_categorical,  verbose=False)
+            self.model.fit(X, y, X_val = X_val, Y_val = Y_val, sample_weight = sample_weight, val_sample_weight = val_sample_weight, train_loss_monitor = train_loss_monitor, 
+                               val_los_monitor = val_loss_monitor, early_stopping_rounds = early_stopping_rounds, cat_features = self.X_categorical,  verbose=False)
 
         else:
 
             try:
-                self.model.fit(X, y, sample_weight = sample_weight, verbose=False)
+                self.model.fit(X, y, X_val = X_val, Y_val = Y_val, sample_weight = sample_weight, val_sample_weight = val_sample_weight, train_loss_monitor = train_loss_monitor, 
+                               val_los_monitor = val_loss_monitor, early_stopping_rounds = early_stopping_rounds, verbose=False)
 
             except:
-                self.model.fit(X, y, sample_weight = sample_weight)
+                self.model.fit(X, y, X_val = X_val, Y_val = Y_val, sample_weight = sample_weight, val_sample_weight = val_sample_weight, train_loss_monitor = train_loss_monitor, 
+                               val_los_monitor = val_loss_monitor, early_stopping_rounds = early_stopping_rounds)
 
 
 
 
-    def fit(self, X, y, sample_weight = None, n_trials = 20, random_state=0, sample=False,
+    def fit(self, X, y, X, y, X_val=None, Y_val=None, sample_weight=None, val_sample_weight=None, train_loss_monitor=None, val_los_monitor=None, early_stopping_rounds=None, 
+            n_trials = 20, random_state=0, sample=False,
             train_or_test = 'test', normalize=True, verbose=True):
 
         """
@@ -319,11 +323,19 @@ class BorutaShap:
 
         if sample_weight is None:
             sample_weight = np.ones(len(X))
+        if val_sample_weight is None:
+            val_sample_weight = np.ones(len(X))
         np.random.seed(random_state)
         self.starting_X = X.copy()
         self.X = X.copy()
         self.y = y.copy()
+        self.X_val = X_val.copy()
+        self.Y_val = Y_val.copy()
         self.sample_weight = sample_weight.copy()
+        self.val_sample_weight = val_sample_weight.copy()
+        self.train_loss_monitor = train_loss_monitor.copy()
+        self.val_loss_monitor = val_loss_monitor.copy()
+        self.early_stopping_rounds = early_stopping_rounds
         self.n_trials = n_trials
         self.random_state = random_state
         self.ncols = self.X.shape[1]
