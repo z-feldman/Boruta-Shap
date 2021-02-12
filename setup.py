@@ -11,7 +11,7 @@ setup(
     description="A feature selection algorithm.",
     long_description=readme(),
     long_description_content_type="text/markdown",
-    url="https://github.com/kmedved/Boruta-Shap",
+    url="https://github.com/z-feldman/Boruta-Shap",
     author="Kostya",
     author_email="",
     license="MIT",
