@@ -213,14 +213,14 @@ class BorutaShap:
 
         elif self.train_or_test.lower() == 'train':
             # model will be trained and evaluated on the same data
-            self.Train_model(self.X_boruta, self.y, self.X_val, self.Y_val, self.sample_weight, self.val_sample_weight, self.train_loss_monitor, self.val_los_monitor, self.early_stopping_rounds)
+            self.Train_model(self.X_boruta, self.y, self.X_val, self.Y_val, self.sample_weight, self.val_sample_weight, self.train_loss_monitor, self.val_loss_monitor, self.early_stopping_rounds)
 
         else:
             raise ValueError('The train_or_test parameter can only be "train" or "test"')
 
 
 
-    def Train_model(self, X, y, X_val=None, Y_val=None, sample_weight=None, val_sample_weight=None, train_loss_monitor=None, val_los_monitor=None, early_stopping_rounds=None):
+    def Train_model(self, X, y, X_val=None, Y_val=None, sample_weight=None, val_sample_weight=None, train_loss_monitor=None, val_loss_monitor=None, early_stopping_rounds=None):
 
         """
         Trains Model also checks to see if the model is an instance of catboost as it needs extra parameters
@@ -242,22 +242,22 @@ class BorutaShap:
 
         if 'catboost' in str(type(self.model)).lower():
             self.model.fit(X, y, X_val = X_val, Y_val = Y_val, sample_weight = sample_weight, val_sample_weight = val_sample_weight, train_loss_monitor = train_loss_monitor, 
-                               val_los_monitor = val_loss_monitor, early_stopping_rounds = early_stopping_rounds, cat_features = self.X_categorical,  verbose=False)
+                               val_loss_monitor = val_loss_monitor, early_stopping_rounds = early_stopping_rounds, cat_features = self.X_categorical,  verbose=False)
 
         else:
 
             try:
                 self.model.fit(X, y, X_val = X_val, Y_val = Y_val, sample_weight = sample_weight, val_sample_weight = val_sample_weight, train_loss_monitor = train_loss_monitor, 
-                               val_los_monitor = val_loss_monitor, early_stopping_rounds = early_stopping_rounds, verbose=False)
+                               val_loss_monitor = val_loss_monitor, early_stopping_rounds = early_stopping_rounds, verbose=False)
 
             except:
                 self.model.fit(X, y, X_val = X_val, Y_val = Y_val, sample_weight = sample_weight, val_sample_weight = val_sample_weight, train_loss_monitor = train_loss_monitor, 
-                               val_los_monitor = val_loss_monitor, early_stopping_rounds = early_stopping_rounds)
+                               val_loss_monitor = val_loss_monitor, early_stopping_rounds = early_stopping_rounds)
 
 
 
 
-    def fit(self, X, y, X_val=None, Y_val=None, sample_weight=None, val_sample_weight=None, train_loss_monitor=None, val_los_monitor=None, early_stopping_rounds=None, 
+    def fit(self, X, y, X_val=None, Y_val=None, sample_weight=None, val_sample_weight=None, train_loss_monitor=None, val_loss_monitor=None, early_stopping_rounds=None, 
             n_trials = 20, random_state=0, sample=False,
             train_or_test = 'test', normalize=True, verbose=True):
 
