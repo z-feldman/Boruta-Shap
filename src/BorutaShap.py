@@ -257,7 +257,7 @@ class BorutaShap:
 
 
 
-    def fit(self, X, y, X, y, X_val=None, Y_val=None, sample_weight=None, val_sample_weight=None, train_loss_monitor=None, val_los_monitor=None, early_stopping_rounds=None, 
+    def fit(self, X, y, X_val=None, Y_val=None, sample_weight=None, val_sample_weight=None, train_loss_monitor=None, val_los_monitor=None, early_stopping_rounds=None, 
             n_trials = 20, random_state=0, sample=False,
             train_or_test = 'test', normalize=True, verbose=True):
 
