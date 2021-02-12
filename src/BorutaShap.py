@@ -331,7 +331,7 @@ class BorutaShap:
         self.y = y.copy()
         self.model.X_val = X_val.copy()
         self.model.Y_val = Y_val.copy()
-        self.model.sample_weight = sample_weight.copy()
+        self.sample_weight = sample_weight.copy()
         self.model.val_sample_weight = val_sample_weight.copy()
         self.model.train_loss_monitor = train_loss_monitor
         self.model.val_loss_monitor = val_loss_monitor
