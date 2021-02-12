@@ -327,14 +327,12 @@ class BorutaShap:
             val_sample_weight = np.ones(len(X))
             
         if not train_loss_monitor:
-            train_loss_monitor = self.model.Score.total_score(  # NOQA
-                Y, sample_weight = sample_weight
-            )
+            train_loss_monitor = lambda D, Y, W: D.total_score(
+                Y, sample_weight=W)
 
         if not val_loss_monitor:
-            val_loss_monitor = self.model.Score.total_score(  # NOQA
-                Y_val, sample_weight = val_sample_weight
-            )  # NOQA    
+            val_loss_monitor = lambda D, Y: D.total_score(
+                Y, sample_weight=val_sample_weight)
         
         np.random.seed(random_state)
         self.starting_X = X.copy()
