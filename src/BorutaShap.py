@@ -344,9 +344,9 @@ class BorutaShap:
         self.Y_val = Y_val.copy()
         self.sample_weight = sample_weight.copy()
         self.val_sample_weight = val_sample_weight.copy()
-        self.train_loss_monitor = self.model.Score.total_score(self.y, self.sample_weight)
-        self.val_loss_monitor = self.model.Score.total_score(self.
-        self.model.early_stopping_rounds = early_stopping_rounds
+        self.train_loss_monitor = train_loss_monitor
+        self.val_loss_monitor = val_loss_monitor
+        self.early_stopping_rounds = early_stopping_rounds
         self.n_trials = n_trials
         self.random_state = random_state
         self.ncols = self.X.shape[1]
