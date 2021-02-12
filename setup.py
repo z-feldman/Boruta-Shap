@@ -11,9 +11,9 @@ setup(
     description="A feature selection algorithm.",
     long_description=readme(),
     long_description_content_type="text/markdown",
-    url="https://github.com/Ekeany/Boruta-Shap",
-    author="Eoghan Keany",
-    author_email="egnkeany@gmail.com",
+    url="https://github.com/kmedved/Boruta-Shap",
+    author="Kostya",
+    author_email="",
     license="MIT",
     classifiers=[
         "License :: OSI Approved :: MIT License",
